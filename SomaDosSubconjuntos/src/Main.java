@@ -27,33 +27,35 @@ public class Main {
 
     public static List<Integer> encontrarSubconjuntoComSomaZero(int[] c) {
         List<Integer> subconjunto = new ArrayList<>();
-        if (retornaUmSubconjunto(c,0, subconjunto, 0)) {
+        if (retornaUmSubconjunto(c,0, subconjunto)) {
             return subconjunto;
         }
         return null;
     }
 
-    public static boolean retornaUmSubconjunto(int[] c, int index, List<Integer> subConjunto, int somaAtual) {
-        if (somaAtual == 0 && !subConjunto.isEmpty()) {
-            return true;
+    public static boolean retornaUmSubconjunto(int[] c, int index, List<Integer> subConjunto) {
+        int i = c[index];
+        int j = c[index+1];
+        int sum = i+j;
+
+        for (int k = index+2; k < c.length; k++) {
+            if (sum + c[k] == 0) {
+                subConjunto.add(i);
+                subConjunto.add(j);
+                subConjunto.add(c[k]);
+                return true;
+            }
         }
 
-        if (index == c.length) {
-            return false; //chegou ao fim do conjunto sem encontrar
+        if (subConjunto.isEmpty()) {
+            retornaUmSubconjunto(c, index+1, subConjunto);
         }
 
-        //Adiciona o elemento atual no subconjunto
-        subConjunto.add(c[index]);
-        if (retornaUmSubconjunto(c, index + 1, subConjunto, somaAtual + c[index])) {
-            return true;
-        }
-
-        //Excluir o elemento atual do subconjunto
-        subConjunto.remove(subConjunto.size() - 1);
-        if (retornaUmSubconjunto(c, index + 1, subConjunto, somaAtual + c[index])) {
+        if (!subConjunto.isEmpty()) {
             return true;
         }
 
         return false;
     }
+
 }
